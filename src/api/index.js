@@ -11,19 +11,55 @@ export const loginAPI = ({ mobile, code }) => request({
     code
   }
 })
-// 获取所有频道
+
+// 用户 - 关注用户
+export const userFollowedAPI = ({ userId }) => request({
+  url: '/v1_0/user/followings',
+  method: 'POST',
+  data: {
+    target: userId
+  }
+})
+
+// 用户 - 取消关注
+export const userUnFollowedAPI = ({ userId }) => request({
+  url: `/v1_0/user/followings/${userId}`,
+  method: 'DELETE'
+})
+
+// 用户 -  用户自己的信息
+export const userInfoAPI = () => request({
+  url: '/v1_0/user',
+  method: 'GET'
+})
+
+// 频道 - 获取所有频道
 export const getAllChannelsAPI = () => request({
   url: '/v1_0/channels',
   method: 'GET'
 })
 
-// 获取用户频道
+// 频道 - 获取用户频道
 export const getUserChannelsAPI = () => request({
   url: '/v1_0/user/channels'
-
 })
 
-// 获取新闻推荐
+// 频道 - 设置更新用户所选频道
+export const updatedChannelsAPI = ({ channels }) => request({
+  url: '/v1_0/user/channels',
+  method: 'PUT',
+  data: {
+    channels
+  }
+})
+
+// 频道 - 删除频道
+export const removeChannelsAPI = ({ channelId }) => request({
+  url: `/v1_0/user/channels/${channelId}`,
+  method: 'DELETE'
+})
+
+// 新闻 - 获取新闻推荐
 export const getAllArticleListAPI = ({ channel_id, timestamp }) => request({
   url: '/v1_0/articles',
   method: 'GET',
@@ -52,5 +88,87 @@ export const reportArticleAPI = ({ artId, type }) => request({
     type: type,
     remark: '暂时不做'
   }
-
 })
+
+// 文章 - 详情
+export const detailAPI = ({ artId }) => request({
+  url: `/v1_0/articles/${artId}`
+})
+
+// 文章 - 点赞
+export const articleLikeAPI = ({ artId }) => request({
+  url: '/v1_0/article/likings',
+  method: 'POST',
+  data: {
+    target: artId
+  }
+})
+
+// 文章 - 取消点赞
+export const articleUnLikeAPI = ({ artId }) => request({
+  url: `/v1_0/article/likings/${artId}`,
+  method: 'DELETE'
+})
+
+// 搜索 - 搜索联想
+export const suggestionListAPI = ({ keywords }) => request({
+  url: '/v1_0/suggestion',
+  params: {
+    q: keywords
+  }
+})
+
+// 搜索 - 搜索结果
+export const searchResultAPI = ({ page = 1, per_page = 10, q }) => request({
+  url: '/v1_0/search',
+  method: 'GET',
+  params: {
+    page,
+    per_page,
+    q
+  }
+})
+
+// 评论 - 获取评论
+export const articleCommentsAPI = ({ artId, offset = null, limit = 10 }) => request({
+  url: '/v1_0/comments',
+  method: 'GET',
+  params: { // axios 只针对params参数 如果发现键值队 值为null 会忽略 不会进行拼接
+    type: 'a', // 对文章的评论
+    source: artId,
+    offset,
+    limit
+  }
+})
+
+// 评论 - 评论点赞
+export const commentsLikeAPI = ({ comId }) => request({
+  url: '/v1_0/comment/likings',
+  method: 'POST',
+  data: {
+    target: comId
+  }
+})
+
+// 评论 - 取消评论点赞
+export const commentsUnLikeAPI = ({ comId }) => request({
+  url: `/v1_0/comment/likings/${comId}`,
+  method: 'DELETE'
+})
+
+// 评论 - 发布评论
+export const commentsSendAPI = ({ id, content, art_id = null }) => {
+  // 处理 art_id 只是对文章进行评论是不需要art_id
+  const obj = {
+    target: id,
+    content
+  }
+  if (art_id !== null) {
+    obj.art_id = art_id
+  }
+  return request({
+    url: '/v1_0/comments',
+    method: 'POST',
+    data: obj
+  })
+}

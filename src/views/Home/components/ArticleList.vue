@@ -16,6 +16,7 @@
           :artObj="obj"
           @disLike="disLikeFn"
           @report="reportFn"
+          @click.native="itemClickFn(obj.art_id)"
         ></ArticleItem>
       </van-list>
     </van-pull-refresh>
@@ -26,7 +27,7 @@
 // 解决BUG1：点击tab导航栏 不刷新数据
 // 解决BUG2: 控制台报重复的错误 原因在于 页面打开 created和onLoad 同时发送请求 数据重复 onLoad两次数据合并 数据重复，key 就重复了
 import { getAllArticleListAPI, dislikeArticleAPI, reportArticleAPI } from '@/api'
-import ArticleItem from './ArticleItem.vue'
+import ArticleItem from '../../../components/ArticleItem.vue'
 import { Notify } from 'vant'
 export default {
   props: {
@@ -73,6 +74,10 @@ export default {
 
     // 底部加载方法
     onLoad () {
+      if (this.artList.length === 0) {
+        this.loading = false
+        return
+      }
       this.getArticleListFn()
     },
 
@@ -100,6 +105,13 @@ export default {
         type: value
       })
       Notify({ type: 'success', message: '举报成功' })
+    },
+
+    // 文章详情
+    itemClickFn (id) {
+      this.$router.push({
+        path: `/articledetail?art_id=${id}`
+      })
     }
 
   }

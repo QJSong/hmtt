@@ -33,8 +33,8 @@
             <span>{{ artObj.comm_count }}评论</span>
             <span>{{ timeAgo(artObj.pubdate) }}</span>
           </div>
-          <!-- 反馈按钮 -->
-          <van-icon name="cross" @click="show = true" />
+          <!-- 反馈按钮 阻止x号的事件冒泡-->
+          <van-icon name="cross" @click.stop="show = true" v-if="isShow"/>
         </div>
       </template>
     </van-cell>
@@ -56,7 +56,12 @@ import { timeAgo } from '@/utils/date'
 import { firstActions, secondActions } from '@/api/report'
 export default {
   props: {
-    artObj: Object
+    artObj: Object,
+    // 反馈按钮 只有在首页文章列表出现
+    isShow: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {

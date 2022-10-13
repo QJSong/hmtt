@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       user: {
-        mobile: '13888888888', // 手机号
+        mobile: '13438246748', // 手机号
         code: '246810' // 验证码（密码）
       },
       isLoading: false // 加载状态
