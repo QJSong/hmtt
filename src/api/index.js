@@ -27,11 +27,46 @@ export const userUnFollowedAPI = ({ userId }) => request({
   method: 'DELETE'
 })
 
-// 用户 -  用户自己的信息
+// 用户 -  用户自己的信息(个人中心使用)
 export const userInfoAPI = () => request({
   url: '/v1_0/user',
   method: 'GET'
 })
+
+// 用户 -  修改用户头像
+export const updatedUserPhotoAPI = (fd) => request({
+  url: '/v1_0/user/photo',
+  method: 'PATCH',
+  data: fd
+})
+
+// 用户 - 用户基本信息(编辑个人资料使用)
+export const userProfileAPI = () => request({
+  url: '/v1_0/user/profile',
+  method: 'GET'
+})
+
+// 用户 - 修改姓名
+export const updateUserProfileAPI = (dataObj) => {
+  const obj = {
+    name: '',
+    gender: 0,
+    birthday: '',
+    intro: ''
+  }
+  for (const k in obj) {
+    if (dataObj[k] === undefined) {
+      delete obj[k]
+    } else {
+      obj[k] = dataObj[k]
+    }
+  }
+  return request({
+    url: '/v1_0/user/profile',
+    method: 'PATCH',
+    data: obj
+  })
+}
 
 // 频道 - 获取所有频道
 export const getAllChannelsAPI = () => request({

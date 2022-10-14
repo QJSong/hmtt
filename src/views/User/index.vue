@@ -6,10 +6,10 @@
       <van-cell>
         <!-- 使用 title 插槽来自定义标题 -->
         <template #icon>
-          <img src="" alt="" class="avatar">
+          <img :src="userObj.photo" alt="" class="avatar">
         </template>
         <template #title>
-          <span class="username">用户名</span>
+          <span class="username">{{userObj.name}}</span>
         </template>
         <template #label>
           <van-tag color="#fff" text-color="#007bff">申请认证</van-tag>
@@ -18,15 +18,15 @@
       <!-- 动态、关注、粉丝 -->
       <div class="user-data">
         <div class="user-data-item">
-          <span>0</span>
+          <span>{{userObj.art_count}}</span>
           <span>动态</span>
         </div>
         <div class="user-data-item">
-          <span>0</span>
+          <span>{{userObj.follow_count}}</span>
           <span>关注</span>
         </div>
         <div class="user-data-item">
-          <span>0</span>
+          <span>{{userObj.fans_count}}</span>
           <span>粉丝</span>
         </div>
       </div>
@@ -34,15 +34,17 @@
 
     <!-- 操作面板 -->
     <van-cell-group class="action-card">
-      <van-cell icon="edit" title="编辑资料" is-link />
+      <van-cell icon="edit" title="编辑资料" is-link to='/useredit'/>
       <van-cell icon="chat-o" title="小思同学" is-link />
-      <van-cell icon="warning-o" title="退出登录" is-link />
+      <van-cell icon="warning-o" title="退出登录" is-link @click="quitFn"/>
     </van-cell-group>
   </div>
 </template>
 
 <script>
 import { userInfoAPI } from '@/api'
+import { Dialog } from 'vant'
+import { removeToken } from '@/utils/token'
 export default {
   data () {
     return {
@@ -53,6 +55,23 @@ export default {
   async created () {
     const res = await userInfoAPI()
     console.log(res)
+    this.userObj = res.data.data
+  },
+
+  methods: {
+    quitFn () {
+      Dialog.confirm({
+        title: '是否要退出？',
+        message: '你不爱我了'
+      })
+        .then(() => {
+          removeToken()
+          this.$router.replace('/login')
+        })
+        .catch(() => {
+          // on cancel
+        })
+    }
   }
 }
 </script>

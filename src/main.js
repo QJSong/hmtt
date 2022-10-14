@@ -3,8 +3,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import 'amfe-flexible' // 移动端适配
-import { NavBar, Form, Field, Button, Tabbar, TabbarItem, Icon, Tab, Tabs, Cell, CellGroup, List, PullRefresh, ActionSheet, Popup, Row, Col, Badge, Search, Divider, Tag } from 'vant'
+import { NavBar, Form, Field, Button, Tabbar, TabbarItem, Icon, Tab, Tabs, Cell, CellGroup, List, PullRefresh, ActionSheet, Popup, Row, Col, Badge, Search, Divider, Tag, Image, Dialog, DatetimePicker } from 'vant'
 
+Vue.use(DatetimePicker)
+Vue.use(Dialog)
+Vue.use(Image)
 Vue.use(Tag)
 Vue.use(Divider)
 Vue.use(Search)
@@ -35,6 +38,16 @@ const directiveObj = {
         // 控制是input 输入框
         // 需要用原生的js去找到输入框
         // 原生DOM.nodeName 拿到标签名字 必须为大写
+        if (el.nodeName === 'TEXTAREA' || el.nodeName === 'INPUT') {
+          el.focus()
+        } else {
+          const theInput = el.querySelector('input')
+          const theTextArea = el.querySelector('textarea')
+          if (theInput) theInput.focus()
+          if (theTextArea) theTextArea.focus()
+        }
+      },
+      update (el) {
         if (el.nodeName === 'TEXTAREA' || el.nodeName === 'INPUT') {
           el.focus()
         } else {
