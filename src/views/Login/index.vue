@@ -48,7 +48,8 @@
 <script>
 import { loginAPI } from '@/api'
 import { setToken } from '@/utils/token'
-import { Notify } from 'vant'
+import Notify from '@/ui/Notify'
+import { setStorage } from '@/utils/storage'
 export default {
   data () {
     return {
@@ -70,9 +71,11 @@ export default {
         Notify({ type: 'success', message: '登陆成功！' })
         // token存储在本地
         setToken(res.data.data.token)
+        // 登录时 存refresh_token
+        setStorage('refresh_token', res.data.data.refresh_token)
         // 页面跳转 这不是不用push 是因为push会产生历史记录 可以回退
         this.$router.replace({
-          path: '/layout/home'
+          path: this.$route.query.path || '/layout/home'
         })
       } catch (error) {
         Notify({ type: 'danger', message: '账号或密码错误' })

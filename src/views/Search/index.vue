@@ -58,13 +58,15 @@
 
 <script>
 import { suggestionListAPI } from '@/api'
+import { getStorage, setStorage } from '@/utils/storage'
 export default {
+  name: 'Search',
   data () {
     return {
       kw: '', // 搜索关键字
       timer: null,
       suggestionList: [],
-      history: JSON.parse(localStorage.getItem('his')) || [] // 搜索历史
+      history: JSON.parse(getStorage('his')) || [] // 搜索历史
     }
   },
   methods: {
@@ -140,7 +142,7 @@ export default {
         const theSet = new Set(this.history)
         // 在把 theSet 转化为 数组
         const arr = Array.from(theSet)
-        localStorage.setItem('his', JSON.stringify(arr))
+        setStorage('his', JSON.stringify(arr))
       }
     }
   }

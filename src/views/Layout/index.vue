@@ -2,7 +2,9 @@
   <div>
     <div class="home_container">
       <!-- 二级路由页面 -->
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
     <!-- 下面底部导航 -->
     <van-tabbar route>

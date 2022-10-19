@@ -1,8 +1,9 @@
 // 封装axios 网络请求
 import theAxios from 'axios'
 import router from '@/router'
-import { Notify } from 'vant'
-import { getToken } from './token'
+// import { Notify } from 'vant'
+import { getToken, removeToken } from './token' // , setToken
+// import { getNewTokenAPI } from '@/api'
 
 const axios = theAxios.create({
   baseURL: 'http://toutiao.itheima.net',
@@ -26,15 +27,32 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
   // 对响应数据做点什么
   return response
-}, function (error) {
+}, async function (error) {
   console.log(error)
   // 对响应错误做点什么
   if (error.response.status === 401) {
-    Notify({ type: 'warning', message: '身份过期了' })
     // 这里不能使用 this.$router 因为this不是vue组件对象无法调用$router
-    router.replace('/login')
+    removeToken()
+    // 直接跳转登陆页面 用户有感知 保存当前页面到路径上
+    // router.currentRoute 相当于this.$route
+    // fullPath 就是路由路径#后面的一切
+    router.replace(`/login?path=${router.currentRoute.fullPath}`)
   }
-
+  //   // 续签token
+  //   const res = await getNewTokenAPI()
+  //   // 拿到新的token 存本地
+  //   setToken(res.data.data.token)
+  //   // 在请求头里更新新的token
+  //   error.config.headers.Authorization = `Bearer ${res.data.data.token}`
+  //   // console.log(res)
+  //   //  再次发生请求
+  //   return axios(error.config)
+  // } else if (error.response.status === 500 && error.config.url === '/v1_0/authorizations' && error.config.method === 'put') {
+  //   // refresh_token 也过期了
+  //   localStorage.clear() // 清除所有token
+  //   Notify({ type: 'warning', message: '身份过期了' })
+  //   router.replace('/login')
+  // }
   return Promise.reject(error)
 })
 

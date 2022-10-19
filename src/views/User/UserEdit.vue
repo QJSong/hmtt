@@ -68,8 +68,9 @@ import {
   updatedUserPhotoAPI,
   updateUserProfileAPI
 } from '@/api'
-import { Notify } from 'vant'
+import Notify from '@/ui/Notify'
 import { formatDate } from '@/utils/date'
+import { mapMutations } from 'vuex'
 export default {
   name: 'UserEdit',
   data () {
@@ -89,6 +90,7 @@ export default {
     this.profileObj = res.data.data
   },
   methods: {
+    ...mapMutations(['SET_USERPHOTO']),
     // 上传文件的方法
     async onFileChange (e) {
       if (e.target.files.length === 0) return
@@ -99,6 +101,7 @@ export default {
       const res = await updatedUserPhotoAPI(theFd)
       console.log(res)
       this.profileObj.photo = res.data.data.photo
+      this.SET_USERPHOTO(res.data.data.photo) // 头像跟新后 保存到vuex里
     },
     imageFn () {
       this.$refs.iptFile.click()

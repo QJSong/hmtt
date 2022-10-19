@@ -1,14 +1,24 @@
 // 封装接口
 
 import request from '@/utils/request'
+import { getStorage } from '@/utils/storage'
 
-// 获取登陆接口
+// 登陆 - 获取tokrn接口
 export const loginAPI = ({ mobile, code }) => request({
   url: '/v1_0/authorizations',
   method: 'POST',
   data: {
     mobile,
     code
+  }
+})
+
+// 登陆 - 获取refresh_token
+export const getNewTokenAPI = () => request({
+  url: '/v1_0/authorizations',
+  method: 'PUT',
+  headers: {
+    Authorization: 'Bearer ' + getStorage('refresh_token')
   }
 })
 

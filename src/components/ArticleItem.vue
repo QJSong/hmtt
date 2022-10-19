@@ -12,7 +12,7 @@
           <img
             v-if="artObj.cover.type === 1"
             class="thumb"
-            :src="artObj.cover.images[0]"
+            v-lazy="artObj.cover.images[0]"
           />
         </div>
 
@@ -21,7 +21,7 @@
             v-for="(imgUrl, index) in artObj.cover.images"
             :key="index"
             class="thumb"
-            :src="imgUrl"
+            v-lazy="imgUrl"
           />
         </div>
       </template>
@@ -34,7 +34,7 @@
             <span>{{ timeAgo(artObj.pubdate) }}</span>
           </div>
           <!-- 反馈按钮 阻止x号的事件冒泡-->
-          <van-icon name="cross" @click.stop="show = true" v-if="isShow"/>
+          <van-icon name="cross" @click.stop="show = true" v-if="isShow" />
         </div>
       </template>
     </van-cell>
@@ -46,7 +46,7 @@
       get-container="body"
       :cancel-text="bottomText"
       @cancel="cancelFn"
-      @close='closeFn'
+      @close="closeFn"
     />
   </div>
 </template>

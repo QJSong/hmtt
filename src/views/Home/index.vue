@@ -7,14 +7,25 @@
         </template>
         <template #right>
           <!-- postcss 只能翻译 style里的代码，标签里的行内样式它无法转换 所以需要手动转换-->
-          <van-icon name="search" size="0.48rem" color="#fff" @click="moveSearchPageFn"/>
+          <van-icon
+            name="search"
+            size="0.48rem"
+            color="#fff"
+            @click="moveSearchPageFn"
+          />
         </template>
       </van-nav-bar>
     </div>
 
     <div class="main">
       <!-- sticky 粘性布局 -->
-      <van-tabs v-model="channelsId" sticky offset-top="1.22667rem" animated>
+      <van-tabs
+        v-model="channelsId"
+        sticky
+        offset-top="1.22667rem"
+        @change="channelChangeFn"
+        animated
+      >
         <van-tab
           :title="obj.name"
           v-for="obj in userChannelsList"
@@ -47,7 +58,12 @@
 </template>
 
 <script>
-import { getUserChannelsAPI, getAllChannelsAPI, updatedChannelsAPI, removeChannelsAPI } from '@/api'
+import {
+  getUserChannelsAPI,
+  getAllChannelsAPI,
+  updatedChannelsAPI,
+  removeChannelsAPI
+} from '@/api'
 import ArticleList from './components/ArticleList.vue'
 import ChannelEdit from './ChannelEdit.vue'
 export default {
@@ -60,15 +76,23 @@ export default {
       channelsId: 0,
       userChannelsList: [],
       allChannelsList: [],
-      show: false
+      show: false,
+      channelScrollObj: {} // 每个频道的滚动高度
     }
   },
   methods: {
+    // 频道切换事件
+    channelChangeFn () {
+      this.$nextTick(() => {
+        document.documentElement.scrollTop =
+          this.channelScrollObj[this.channelsId]
+      })
+    },
     // 新增频道
     async addChannelFn (channelObj) {
       this.userChannelsList.push(channelObj)
       // 接口要求传入的是 id月 seq 序号 且要排除 推荐
-      const newArr = this.userChannelsList.filter(obj => obj.id !== 0) // 排除推荐
+      const newArr = this.userChannelsList.filter((obj) => obj.id !== 0) // 排除推荐
       // 将对象的name删除 在加入seq
       const theNewArr = newArr.map((obj, index) => {
         const newObj = { ...obj } // 浅拷贝
@@ -85,7 +109,9 @@ export default {
     },
     // 删除频道
     async removeChannelFn (channelObj) {
-      const index = this.userChannelsList.findIndex(obj => obj.id === channelObj.id)
+      const index = this.userChannelsList.findIndex(
+        (obj) => obj.id === channelObj.id
+      )
       this.userChannelsList.splice(index, 1)
 
       const res = await removeChannelsAPI({
@@ -103,8 +129,14 @@ export default {
     // 搜索事件
     moveSearchPageFn () {
       this.$router.push('/search')
+    },
+    scrollFn () {
+      this.$route.meta.scrollT = document.documentElement.scrollTop
+      // 保存每个频道的滚动距离
+      this.channelScrollObj[this.channelsId] =
+        document.documentElement.scrollTop
+      // console.log(this.channelScrollObj)
     }
-
   },
   async created () {
     // 用户频道列表
@@ -133,6 +165,15 @@ export default {
       })
       return newArr
     }
+  },
+  // 保存 首页的滚动的距离
+  activated () {
+    window.addEventListener('scroll', this.scrollFn)
+    document.documentElement.scrollTop = this.$route.meta.scrollT
+  },
+  // 首页失去激活触发
+  deactivated () {
+    window.removeEventListener('scroll', this.scrollFn)
   }
 }
 </script>

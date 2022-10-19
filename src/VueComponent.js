@@ -1,0 +1,31 @@
+import Vue from 'vue'
+import { NavBar, Form, Field, Button, Tabbar, TabbarItem, Icon, Tab, Tabs, Cell, CellGroup, List, PullRefresh, ActionSheet, Popup, Row, Col, Badge, Search, Divider, Tag, Image, Dialog, DatetimePicker, Loading, Lazyload } from 'vant'
+
+Vue.use(Lazyload, {
+  error: 'https://blog.fluidui.com/assets/images/posts/imageedit_1_9273372713.png'
+})
+Vue.use(Loading)
+Vue.use(DatetimePicker)
+Vue.use(Dialog)
+Vue.use(Image)
+Vue.use(Tag)
+Vue.use(Divider)
+Vue.use(Search)
+Vue.use(Badge)
+Vue.use(Row)
+Vue.use(Col)
+Vue.use(Popup)
+Vue.use(ActionSheet)
+Vue.use(PullRefresh)
+Vue.use(List)
+Vue.use(Cell)
+Vue.use(CellGroup)
+Vue.use(Tab)
+Vue.use(Tabs)
+Vue.use(Icon)
+Vue.use(Tabbar)
+Vue.use(TabbarItem)
+Vue.use(Button)
+Vue.use(Form)
+Vue.use(Field)
+Vue.use(NavBar)

@@ -28,7 +28,7 @@
 // 解决BUG2: 控制台报重复的错误 原因在于 页面打开 created和onLoad 同时发送请求 数据重复 onLoad两次数据合并 数据重复，key 就重复了
 import { getAllArticleListAPI, dislikeArticleAPI, reportArticleAPI } from '@/api'
 import ArticleItem from '../../../components/ArticleItem.vue'
-import { Notify } from 'vant'
+import Notify from '@/ui/Notify'
 export default {
   props: {
     // artList: Array
